@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tracy Mazelin Capstone Style Guide</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style type="text/css" media="screen">
+        .label {
+            text-align: left;
+        }
+        
+        input[type=date]::-webkit-datetime-edit {
+            color: #dbdbdb;
+        }
+        
+        [option]::-webkit-datetime-edit {
+            color: #dbdbdb;
+        }
+        
+        .field {
+            text-align: left;
+        }
+    </style>
+
+</head>
+
+<body>
+    <section class="section">
+        <h1 class="title">Leave Management System Style Guide</h1>
+        <h4 class="subtitle">This style guide utilizes Bulma - a modern CSS framework</h4>
+    </section>
+    <section class="section">
+        <div class="content">
+            <h1>Heading 1</h1>
+            <p>Lorem ipsum<sup><a>[1]</a></sup> dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui. Fusce erat odio, sollicitudin
+                vel erat vel, interdum mattis neque. Sub<sub>script</sub> works as well!</p>
+            <h2>Heading 2</h2>
+            <p>Curabitur accumsan turpis pharetra <strong>augue tincidunt</strong> blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus
+                facilisis. Donec at dignissim dui. Ut et neque nisl.</p>
+            <ul>
+                <li>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
+                <li>Morbi eu nulla lobortis, lobortis est in, fringilla felis.</li>
+                <li>Aliquam nec felis in sapien venenatis viverra fermentum nec lectus.</li>
+                <li>Ut non enim metus.</li>
+            </ul>
+            <h3>Heading 3</h3>
+            <p>Quisque ante lacus, malesuada ac auctor vitae, congue <a href="#">non ante</a>. Phasellus lacus ex, semper ac tortor nec, fringilla condimentum orci. Fusce eu rutrum tellus.</p>
+            <h4>List Items</h4>
+            <ol>
+                <li>Donec blandit a lorem id convallis.</li>
+                <li>Cras gravida arcu at diam gravida gravida.</li>
+                <li>Integer in volutpat libero.</li>
+                <li>Donec a diam tellus.</li>
+                <li>Aenean nec tortor orci.</li>
+                <li>Quisque aliquam cursus urna, non bibendum massa viverra eget.</li>
+                <li>Vivamus maximus ultricies pulvinar.</li>
+            </ol>
+            <blockquote>Ut venenatis, nisl scelerisque sollicitudin fermentum, quam libero hendrerit ipsum, ut blandit est tellus sit amet turpis.</blockquote>
+            <p>Quisque at semper enim, eu hendrerit odio. Etiam auctor nisl et <em>justo sodales</em> elementum. Maecenas ultrices lacus quis neque consectetur, et lobortis nisi molestie.</p>
+            <p>Sed sagittis enim ac tortor maximus rutrum. Nulla facilisi. Donec mattis vulputate risus in luctus. Maecenas vestibulum interdum commodo.</p>
+            <dl>
+                <dt>Web</dt>
+                <dd>The part of the Internet that contains websites and web pages</dd>
+            </dl>
+            <p>Suspendisse egestas sapien non felis placerat elementum. Morbi tortor nisl, suscipit sed mi sit amet, mollis malesuada nulla. Nulla facilisi. Nullam ac erat ante.</p>
+        </div>
+    </section>
+    <section class="section">
+        <h1 class="title">Form Elements</h1>
+
+        <form class="box">
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input" type="email" placeholder="e.g. alex@example.com">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                    <input class="input" type="password" placeholder="********">
+                </div>
+            </div>
+
+            <button class="button is-primary">Sign in</button>
+        </form>
+    </section>
+    <section class="section ">
+        <h1 class="title ">Tables</h1>
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth ">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Type</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Comment</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Name </td>
+                    <td>Type</td>
+                    <td>Start Date</td>
+                    <td>End Date </td>
+                    <td>Comment</td>
+
+                </tr>
+
+                <tr>
+                    <td>Name </td>
+                    <td>Type</td>
+                    <td>Start Date</td>
+                    <td>End Date </td>
+                    <td>Comment</td>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </section>
+    <section class="section ">
+        <h1 class="title ">Dropdowns</h1>
+        <div class="dropdown is-active ">
+            <div class="dropdown-trigger ">
+                <button class="button " aria-haspopup="true " aria-controls="dropdown-menu ">
+                <span>Dropdown button</span>
+                <span class="icon is-small ">
+                  <i class="fas fa-angle-down " aria-hidden="true "></i>
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu " id="dropdown-menu " role="menu ">
+                <div class="dropdown-content ">
+                    <a href="# " class="dropdown-item ">
+                  Dropdown item
+                </a>
+                    <a class="dropdown-item ">
+                  Other dropdown item
+                </a>
+                    <a href="# " class="dropdown-item is-active ">
+                  Active dropdown item
+                </a>
+                    <a href="# " class="dropdown-item ">
+                  Other dropdown item
+                </a>
+                    <hr class="dropdown-divider ">
+                    <a href="# " class="dropdown-item ">
+                  With a divider
+                </a>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <section class="section ">
+        <h1 class="title ">Colors</h1>
+        <p class="title ">With block</p>
+
+
+        </div>
+        </div>
+
+    </section>
+
+    <section class="section ">
+        <h1 class="title ">Buttons</h1>
+        <button class="button is-primary ">
+            Button
+          </button>
+        <button class="button is-link ">
+            Button
+          </button>
+        <button class="button is-info ">
+            Button
+          </button>
+        <button class="button is-success ">
+            Button
+          </button>
+        <button class="button is-warning ">
+            Button
+          </button>
+        <button class="button is-danger ">
+            Button
+          </button>
+    </section>
+
+    <section class="section ">
+        <h1 class="title ">Boxes</h1>
+        <div class="box">
+            I'm in a box.
+        </div>
+    </section>
+</body>
+
+</html>
