@@ -131,3 +131,6 @@ dmypy.json
 # Other
 .notes
 .DS_Store
+README.skip
+.vscode
+.flaskenv
