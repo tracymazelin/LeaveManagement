@@ -133,3 +133,4 @@ dmypy.json
 .DS_Store
 README.skip
 .vscode
+.flaskenv

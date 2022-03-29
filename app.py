@@ -1,28 +1,13 @@
-from flask import Flask , render_template, jsonify, request, redirect, url_for, jsonify
+from flask import Flask, render_template, jsonify, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from config import Config
 
 app = Flask(__name__)
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
-	
+app.config.from_object(Config)
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-class User(db.Model):
-	# Defines the Table Name user
-	__tablename__ = "user"
-
-	# Makes three columns into the table id, name, email
-	user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	name = db.Column(db.String(100), nullable=False)
-	email = db.Column(db.String(100), nullable=False)
-
-	# A constructor function where we will pass the name and email of a user and it gets add as a new entry in the table.
-	def __init__(self, name, email):
-		self.name = name
-		self.email = email
-
-# Control will come here and then gets redirect to the index function
 @app.route("/")
 def home():
 	return redirect(url_for('index'))
