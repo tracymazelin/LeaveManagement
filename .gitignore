@@ -134,3 +134,4 @@ dmypy.json
 README.skip
 .vscode
 .flaskenv
+db.sqlite
