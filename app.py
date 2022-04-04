@@ -36,5 +36,6 @@ from main import main as main_blueprint
 app.register_blueprint(main_blueprint)
 
 if __name__=="__main__":
+	#db.drop_all()
 	db.create_all()
 	app.run(debug=True)

@@ -40,7 +40,7 @@ def index():
 @login_required
 def profile():
     employee = Employee.get_logged_in_employee_id(current_user)
-    return render_template('profile.html', name=employee.first_name)
+    return render_template('profile.html', employee=employee)
 
 @main.route('/add_employee')
 @login_required
