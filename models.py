@@ -16,6 +16,9 @@ class User(UserMixin, db.Model):
     def __repr__(self):
 	    return "<User: {} {}>".format(self.user_id, self.email)
 
+    def get_id(self):
+        return (self.user_id)
+
     def user_is_admin(user):
         return (Employee.query.filter_by(user_id=user.user_id).first())
 
@@ -29,3 +32,6 @@ class Employee(UserMixin, db.Model):
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+
+    def get_logged_in_employee_id(user):
+        return Employee.query.filter(Employee.employee_id == user.user_id).first()
