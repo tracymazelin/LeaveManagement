@@ -32,6 +32,7 @@ class Employee(UserMixin, db.Model):
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    manager_id = db.Column(db.Integer, db.ForeignKey('manager.manager_id'))
 
     def get_logged_in_employee_id(user):
         return Employee.query.filter(Employee.employee_id == user.user_id).first()
@@ -50,3 +51,11 @@ class ApprovalStatus(db.Model):
     created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
+
+class Manager(db.Model):
+    manager_id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'), nullable=False)
+    created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
+    deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
+   
