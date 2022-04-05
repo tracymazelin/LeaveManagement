@@ -22,11 +22,24 @@ class User(UserMixin, db.Model):
     def user_is_admin(user):
         return (Employee.query.filter_by(user_id=user.user_id).first())
 
-manager_employee = db.Table('manager_employee', 
-    db.Column('manager_employee_id', db.Integer, primary_key=True),
-    db.Column('manager_id', db.Integer, db.ForeignKey('manager.manager_id'), nullable=True),
-    db.Column('employee_id', db.Integer, db.ForeignKey('employee.employee_id'), nullable=False)
-)
+class Employee(UserMixin, db.Model):
+    employee_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    manager_id = db.Column(db.Integer, db.ForeignKey('manager.manager_id'))
+    first_name = db.Column(db.String(60), index=True, nullable=False)
+    last_name = db.Column(db.String(60), index=True, nullable=False)
+    start_date = db.Column(db.Date, default=date.today())
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)
+    created_date = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
+    deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
+    
+    #relationships
+    #leave_requests = db.relationship('LeaveRequest', backref='employee')
+    #manager = db.relationship('Manager', backref='employee')
+
+    def get_logged_in_employee_id(user):
+        return Employee.query.filter(Employee.employee_id == user.user_id).first()
 
 class Manager(db.Model):
     manager_id = db.Column(db.Integer, primary_key=True)
@@ -56,24 +69,11 @@ class Manager(db.Model):
     def get_all_managers():
         return Employee.query.filter(Employee.manager_id == None).all()
 
-class Employee(UserMixin, db.Model):
-    employee_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    manager_id = db.Column(db.Integer, db.ForeignKey('manager.manager_id'))
-    first_name = db.Column(db.String(60), index=True, nullable=False)
-    last_name = db.Column(db.String(60), index=True, nullable=False)
-    start_date = db.Column(db.Date, default=date.today())
-    is_admin = db.Column(db.Boolean, default=False, nullable=False)
-    created_date = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
-    deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
-    
-    #relationships
-    #leave_requests = db.relationship('LeaveRequest', backref='employee')
-    #manager = db.relationship('Manager', backref='employee')
-
-    def get_logged_in_employee_id(user):
-        return Employee.query.filter(Employee.employee_id == user.user_id).first()
+manager_employee = db.Table('manager_employee', 
+    db.Column('manager_employee_id', db.Integer, primary_key=True),
+    db.Column('manager_id', db.Integer, db.ForeignKey('manager.manager_id'), nullable=True),
+    db.Column('employee_id', db.Integer, db.ForeignKey('employee.employee_id'), nullable=False)
+)
 
 class LeaveRequest(db.Model):
     leave_request_id = db.Column(db.Integer, primary_key=True)
@@ -99,7 +99,6 @@ class LeaveType(db.Model):
     created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
-
 
 class ApprovalStatus(db.Model):
     approval_status_id = db.Column(db.Integer, primary_key=True)
