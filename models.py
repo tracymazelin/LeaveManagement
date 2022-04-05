@@ -35,3 +35,18 @@ class Employee(UserMixin, db.Model):
 
     def get_logged_in_employee_id(user):
         return Employee.query.filter(Employee.employee_id == user.user_id).first()
+
+class LeaveType(db.Model):
+    leave_type_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    days_per_year = db.Column(db.Integer, nullable=False)
+    created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
+    deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
+
+class ApprovalStatus(db.Model):
+    approval_status_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    created_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
+    deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
