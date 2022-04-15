@@ -5,21 +5,11 @@ from datetime import date, datetime
 fake = Faker()
 
 def add_employees():
-    admin = Employee(
-        first_name=fake.first_name(),
-        last_name=fake.last_name(),
-        is_admin=True,
-        user_id=1,
-        manager_employee_id=2
-    )
-    db.session.add(admin)
-    db.session.commit()
-
     manager1 = Employee(
         first_name=fake.first_name(),
         last_name=fake.last_name(),
         is_admin=False,
-        user_id=2,
+        user_id=1,
         manager_employee_id=None
     )
     db.session.add(manager1)
@@ -34,31 +24,41 @@ def add_employees():
     )
     db.session.add(manager2)
     db.session.commit()
+
+    admin = Employee(
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        is_admin=True,
+        user_id=3,
+        manager_employee_id=1
+    )
+    db.session.add(admin)
+    db.session.commit()
    
-    for i in range(3, 5):
-        employee = Employee(
+    for i in range(4, 5):
+        employees1 = Employee(
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            is_admin=False,
+            user_id=i,
+            manager_employee_id=1
+        )  
+        db.session.add(employees1)
+    db.session.commit()
+   
+    for i in range(5, 7):
+        employees2 = Employee(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
             is_admin=False,
             user_id=i,
             manager_employee_id=2
-        )  
-        db.session.add(employee)
-    db.session.commit()
-   
-    for i in range(6, 9):
-        employee = Employee(
-            first_name=fake.first_name(),
-            last_name=fake.last_name(),
-            is_admin=False,
-            user_id=i,
-            manager_employee_id=3
         )
-        db.session.add(employee)
+        db.session.add(employees2)
     db.session.commit()
 
 def add_users():
-    for i in range(1,9):
+    for i in range(1,7):
         emp=Employee.get_employee_by_id(i)
         user = User(
            email=emp.first_name.lower()+"."+emp.last_name.lower()+"@test.com",
