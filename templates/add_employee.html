@@ -1,0 +1,57 @@
+{% extends "base.html" %} {% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Add a new employee</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %} {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}</a>
+        </div>
+        {% endif %} {% endwith %}
+        <form method="POST" action="/add_employee">
+
+            <div class="field">
+                <label class="label">First Name</label>
+                <div class="control">
+                    <input class="input is-large" type="text" name="first_name" placeholder="First Name" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Last Name</label>
+                <div class="control">
+                    <input class="input is-large" type="text" name="last_name" placeholder="Last Name" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Start Date</label>
+                <div class="control">
+                    <input class="input is-large" type="date" name="start_date" placeholder="Start Date" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Manager</label>
+                <div class="control">
+                    <div class="select is-large ">
+                        <select name="manager"> 
+                        {% for manager in managers %}
+                  <option value={{ manager.employee_id }}>{{ manager.first_name }} {{ manager.last_name }}</option>
+                  {% endfor %}
+                </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Is Administrator</label>
+                <div class="select is-large dropdown"> <select name="is_admin">
+                      <option value="false">False</option>
+                      <option value="true">True</option>
+                    </select>
+                </div>
+            </div>
+            <button class="button is-block is-info is-large is-fullwidth">Add Employee</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -2,14 +2,6 @@
     text-align: left;
 }
 
-input[type=date]::-webkit-datetime-edit {
-    color: #dbdbdb;
-}
-
-[option]::-webkit-datetime-edit {
-    color: #dbdbdb;
-}
-
 .field {
     text-align: left;
 }
