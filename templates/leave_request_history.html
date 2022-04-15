@@ -1,0 +1,31 @@
+{% extends "base.html" %} {% block content %}
+<h3 class="title">Leave History</h3>
+<div class="column is-three-fifths is-offset-one-fifth">
+    <div class="box">
+        {% if requests %}
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Comment</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                <tr>
+                    <td>{{ request.types.name }}</td>
+                    <td>{{ request.start_date }}</td>
+                    <td>{{ request.end_date }} </td>
+                    <td>{{request.comment}}</td>
+                    <td>{{request.status.name}}</td>
+                </tr>{% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Results</p>
+        {% endif %}
+    </div>
+</div> {% endblock %}

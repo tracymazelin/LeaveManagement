@@ -20,7 +20,6 @@ from models import User
 def load_user(user_id):
 	return User.query.get(int(user_id))
 
-
 @app.route("/")
 def home():
 	return redirect(url_for('index'))
@@ -34,6 +33,9 @@ app.register_blueprint(auth_blueprint)
 
 from main import main as main_blueprint
 app.register_blueprint(main_blueprint)
+
+from api import api as api_blueprint
+app.register_blueprint(api_blueprint)
 
 if __name__=="__main__":
 	#db.drop_all()
