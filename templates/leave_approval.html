@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+<h3 class="title">Process Employee Leave Requests</h3>
+
+{% with messages = get_flashed_messages() %} {% if messages %}
+<div class="notification is-danger ">
+    {{ messages[0] }}</a>
+</div>
+{% endif %} {% endwith %}
+<form method="POST">
+    <div class="box">
+        {% if leave_requests %}
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Type</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Comment</th>
+                    <th>Approve</th>
+                    <th>Deny</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req[2]}} {{ req.last_name}} </td>
+                    <td>{{ req.name }} </td>
+                    <td>{{ req.start_date}}</td>
+                    <td>{{ req.end_date }} </td>
+                    <td>{{ req.comment }}</td>
+                    <td><button class="button is-success" name="decision" value={{ req.id }} formaction="/approve">Approve</button></td>
+                    <td><button class="button is-danger" name="decision" value={{ req.id }} formaction="/deny">Deny</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Results</p>
+        {% endif %}
+    </div>
+    </div> {% endblock %}
