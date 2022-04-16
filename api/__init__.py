@@ -1,5 +1,11 @@
 from flask import Blueprint
+import json
 
-api = Blueprint('api', __name__)
+bp = Blueprint('api', __name__)
+from api import employees
 
-from api import test
+
+def decode_json(data):
+    data = data.response
+    data = [json.loads(i) for i in data if i]
+    return data

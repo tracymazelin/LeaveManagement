@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, request, redirect
+from flask import Blueprint, render_template, flash, request, redirect, jsonify
 from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,7 +7,9 @@ from wtforms.validators import DataRequired, Length
 from models import Employee, User, LeaveType, LeaveRequest, Manager
 from app import db
 from datetime import datetime
-from api import test
+from api import employees, leave_types, decode_json
+import json
+
 
 main = Blueprint('main', __name__)
 
@@ -39,9 +41,12 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    employee = Employee.get_logged_in_employee_id(current_user)
-    #emp = test.get_employee(current_user)
-    return render_template('profile.html', employee=employee)
+    employee = employees.get_employee(current_user.get_id())
+    data = decode_json(employee)
+    test = leave_types.get_leave_types()
+    test = decode_json(test)
+    print(test)
+    return render_template('profile.html', employee=data[0])
 
 @main.route('/add_employee')
 @login_required
@@ -56,16 +61,17 @@ def add_employee_post():
     start_date = datetime.fromisoformat(request.form.get('start_date'))
     is_admin = True if (request.form.get('is_admin')).lower() == 'true' else False 
     manager = request.form.get('manager')
+    email = '{}.{}@test.com'.format(first_name.lower(), last_name.lower())
 
-    # employee = Employee.query.filter_by(email=email).first() 
+    user = User.query.filter_by(email=email).first() 
 
-    # if employee: 
-    #     flash('This employee already exists.')
-    #     return redirect('add_employee')
+    if user: 
+        flash('This employee/user already exists.')
+        return redirect('add_employee')
 
     #create new employee with the form data. 
-    new_employee = Employee(first_name=first_name, last_name=last_name, start_date=start_date, manager_employee_id=manager.manager_employee_id, is_admin=is_admin)
-    new_user = User(email=first_name.lower()+"."+emp.last_name.lower()+"@test.com", password=generate_password_hash('test', method='sha256'))
+    new_employee = Employee(first_name=first_name, last_name=last_name, start_date=start_date, manager_employee_id=manager, is_admin=is_admin)
+    new_user = User(email=email, password=generate_password_hash('test', method='sha256'))
     # add the new employee to the database
     db.session.add(new_employee)
     db.session.add(new_user)
@@ -103,7 +109,7 @@ def leave_request_history():
 @login_required
 def leave_approval():
     employee = Employee.get_logged_in_employee_id(current_user)   
-    return render_template('leave_approval.html', leave_requests=Employee.get_manager_approval_data(employee))
+    return render_template('leave_approval.html', requests=Employee.get_manager_approval_data(employee))
 
 @main.route('/approve', methods=['POST'])
 @login_required

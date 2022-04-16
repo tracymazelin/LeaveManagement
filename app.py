@@ -4,7 +4,6 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from config import Config
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
@@ -34,8 +33,8 @@ app.register_blueprint(auth_blueprint)
 from main import main as main_blueprint
 app.register_blueprint(main_blueprint)
 
-from api import api as api_blueprint
-app.register_blueprint(api_blueprint)
+from api import bp as api_bp
+app.register_blueprint(api_bp, url_prefix='/api')
 
 if __name__=="__main__":
 	#db.drop_all()
