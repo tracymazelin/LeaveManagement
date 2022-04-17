@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 from models import User, Employee
+from datetime import date, datetime
 from app import db
 
 auth = Blueprint('auth', __name__)
@@ -52,16 +53,14 @@ def signup_post():
     # add the new user to the database
     db.session.add(new_user)
     db.session.commit()
-    
-    # assigning them to the first manager in the system.  Admin can update later.
+
     user = User.query.filter_by(email=email).first()
-   
-    new_emp = Employee(user_id=user.user_id, first_name=first_name, last_name=last_name )
 
-    # add the new employee to the database
-    db.session.add(new_emp)
+    # add new employee
+    new_employee = Employee(first_name=first_name, last_name=last_name, start_date=date.today(), is_admin=False, user_id=user.user_id, manager_employee_id=1)
+    db.session.add(new_employee)
     db.session.commit()
-
+    
     return redirect(url_for('auth.login'))
 
 @auth.route('/logout')
