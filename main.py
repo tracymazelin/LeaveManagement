@@ -43,9 +43,6 @@ def index():
 def profile():
     employee = employees.get_employee(current_user.get_id())
     data = decode_json(employee)
-    test = leave_types.get_leave_types()
-    test = decode_json(test)
-    print(test)
     return render_template('profile.html', employee=data[0])
 
 @main.route('/add_employee')
