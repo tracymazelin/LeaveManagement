@@ -24,7 +24,7 @@ class User(UserMixin, db.Model):
 
 class Manager(db.Model):    
     manager_id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer)
+    manager_employee_id = db.Column(db.Integer)
 
   
     def user_is_manager(user):
