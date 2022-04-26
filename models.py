@@ -21,6 +21,22 @@ class User(UserMixin, db.Model):
 
     def user_is_admin(user):
         return (Employee.query.filter_by(user_id=user.user_id).first())
+
+class Manager(db.Model):    
+    manager_id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'), nullable=False)
+
+  
+    def user_is_manager(user):
+        return (Employee.query.filter_by(user_id=user.user_id).first()).manager_employee_id
+    
+    def get_manager_details(user):
+        pass
+       
+
+    def get_all_managers():
+        return Employee.query.filter(Employee.manager_employee_id == None).all()
+   
     
 class Employee(db.Model):
     employee_id = db.Column(db.Integer, primary_key=True)
@@ -203,18 +219,3 @@ approval_status_parser.add_argument('id', type=dict, location=('leave_type',))
 approval_status_parser = approval_status_parser.parse_args(req=leave_parser)
     
 
-class Manager(db.Model):    
-    manager_id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'), nullable=False)
-
-  
-    def user_is_manager(user):
-        return (Employee.query.filter_by(user_id=user.user_id).first()).manager_employee_id
-    
-    def get_manager_details(user):
-        pass
-       
-
-    def get_all_managers():
-        return Employee.query.filter(Employee.manager_employee_id == None).all()
-   
