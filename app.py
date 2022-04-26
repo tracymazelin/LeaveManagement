@@ -16,7 +16,7 @@ login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 logging.basicConfig(level=logging.DEBUG)
 
-import models
+from models import User
 
 @login_manager.user_loader
 def load_user(user_id):

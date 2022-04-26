@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, request, redirect, jsonify
+from flask import Blueprint, render_template, flash, request, redirect, jsonify, json
 from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -9,7 +9,6 @@ from app import db
 from datetime import datetime
 from api.controllers import Leave_Types_Api, Leave_Type_Api
 
-import json
 
 
 main = Blueprint('main', __name__)
@@ -18,7 +17,7 @@ main = Blueprint('main', __name__)
 @main.context_processor
 def is_employee_admin():
     if current_user.is_authenticated:
-        admin = (User.user_is_admin(current_user)).is_admin
+        admin = (User.user_is_admin(current_user)).employee_is_admin
     else:
         admin = False
     return dict(user_is_admin=admin)
@@ -26,7 +25,7 @@ def is_employee_admin():
 @main.context_processor
 def is_employee_manager():
     if current_user.is_authenticated:
-        manager = Manager.user_is_manager(current_user)
+        manager = Employee.query.get(current_user.get_id()).employee_is_manager
         if manager is None:
             manager = True
         else:
@@ -42,8 +41,9 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    data = decode_json(employees.get_employee(current_user.get_id()))
-    return render_template('profile.html', employee=data[0])
+    data = Employee.query.get(current_user.get_id())
+  
+    return render_template('profile.html', employee=data)
 
 @main.route('/add_employee')
 @login_required
