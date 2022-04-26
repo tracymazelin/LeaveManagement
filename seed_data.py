@@ -16,8 +16,8 @@ def add_employees():
     db.session.commit()
 
 def add_managers():
-    db.session.add(Manager(employee_id=1))
-    db.session.add(Manager(employee_id=2))
+    db.session.add(Manager(manager_employee_id=1))
+    db.session.add(Manager(manager_employee_id=2))
     db.session.commit()
 
 def add_users():
