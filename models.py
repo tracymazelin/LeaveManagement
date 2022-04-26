@@ -24,19 +24,21 @@ class User(UserMixin, db.Model):
     
 class Employee(db.Model):
     employee_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=True)
+    manager_id = db.Column(db.Integer, db.ForeignKey('manager.manager_id'), nullable=True)
     first_name = db.Column(db.String(60), index=True, nullable=False)
     last_name = db.Column(db.String(60), index=True, nullable=False)
     start_date = db.Column(db.Date, default=date.today())
-    is_admin = db.Column(db.Boolean, default=False, nullable=False)
+    employee_is_admin = db.Column(db.Boolean, default=False, nullable=False)
+    employee_is_manager = db.Column(db.Boolean, default=False, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-    manager_employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'), nullable=True)
-    
-    manager = db.relationship("Employee", foreign_keys='Employee.manager_employee_id')
 
-   
+    #manager = db.relationship('Manager', back_populates='employee', foreign_keys='Employee.manager_id')
+    #user = db.relationship('User', back_populates='employee', foreign_keys='User.user_id')
+    
+       
     def get_logged_in_employee_id(user):
         return Employee.query.filter(Employee.employee_id == user.user_id).first()
     
@@ -83,9 +85,9 @@ class Employee(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name,
             'is_admin': self.is_admin,
-            'is_manager': self.is_manager(self.employee_id),
+            'is_manager': self.is_manager,
             'manager': {
-                'id': self.manager_employee_id,
+                'id': self.manager_id,
                 'name': self.get_manager_name_by_id(self.manager_employee_id)
                 
             }
@@ -199,8 +201,13 @@ leave_type_parser = leave_type_parser.parse_args(req=leave_parser)
 approval_status_parser = reqparse.RequestParser(bundle_errors=True)
 approval_status_parser.add_argument('id', type=dict, location=('leave_type',))
 approval_status_parser = approval_status_parser.parse_args(req=leave_parser)
+    
 
-class Manager():
+class Manager(db.Model):    
+    manager_id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'), nullable=False)
+
+  
     def user_is_manager(user):
         return (Employee.query.filter_by(user_id=user.user_id).first()).manager_employee_id
     
@@ -210,3 +217,4 @@ class Manager():
 
     def get_all_managers():
         return Employee.query.filter(Employee.manager_employee_id == None).all()
+   
