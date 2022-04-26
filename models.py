@@ -39,7 +39,7 @@ class Manager(db.Model):
    
     
 class Employee(db.Model):
-    employee_id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('manager.employee_id'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=True)
     manager_id = db.Column(db.Integer, db.ForeignKey('manager.manager_id'), nullable=True)
     first_name = db.Column(db.String(60), index=True, nullable=False)
