@@ -7,7 +7,8 @@ from wtforms.validators import DataRequired, Length
 from models import Employee, User, LeaveType, LeaveRequest, Manager
 from app import db
 from datetime import datetime
-from api import employees, leave_types, decode_json
+from api.controllers import Leave_Types_Api, Leave_Type_Api
+#from api import employees, leave_types, decode_json
 import json
 
 
@@ -41,8 +42,7 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    employee = employees.get_employee(current_user.get_id())
-    data = decode_json(employee)
+    data = decode_json(employees.get_employee(current_user.get_id()))
     return render_template('profile.html', employee=data[0])
 
 @main.route('/add_employee')
@@ -78,19 +78,17 @@ def add_employee_post():
 @main.route('/leave_request')
 @login_required
 def leave_request():
-    return render_template('leave_request.html', types=LeaveType.query.all())
+    return render_template('leave_request.html', types=Leave_Types_Api.get(LeaveType))
     
 @main.route('/leave_request', methods=['POST'])
 @login_required
 def leave_request_post():
-    types = LeaveType.query.all()
     employee = Employee.get_logged_in_employee_id(current_user)
     leave_type = request.form.get('types')
     approval_status = 1
     start_date = datetime.fromisoformat(request.form.get('start_date'))
     end_date = datetime.fromisoformat(request.form.get('end_date'))
     comment = request.form.get('comment')
-    print(leave_type, flush=True)
     leave_request = LeaveRequest(employee_id=employee.employee_id, leave_type_id=leave_type, approval_status_id=approval_status, start_date=start_date, end_date=end_date, comment=comment)
     db.session.add(leave_request)
     db.session.commit()   
@@ -105,8 +103,10 @@ def leave_request_history():
 @main.route('/leave_approval')
 @login_required
 def leave_approval():
-    employee = Employee.get_logged_in_employee_id(current_user)   
-    return render_template('leave_approval.html', requests=Employee.get_manager_approval_data(employee))
+    manager = Employee.get_logged_in_employee_id(current_user)
+    results =  Employee.get_manager_approval_data(manager)
+    print(results[0])
+    return render_template('leave_approval.html', requests=results)
 
 @main.route('/approve', methods=['POST'])
 @login_required

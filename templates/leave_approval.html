@@ -25,10 +25,10 @@
             <tbody>
                 {% for req in requests %}
                 <tr>
-                    <td>{{ req[2]}} {{ req.last_name}} </td>
-                    <td>{{ req.name }} </td>
-                    <td>{{ req.start_date}}</td>
-                    <td>{{ req.end_date }} </td>
+                    <td>{{ req.first_name}} {{ req.last_name}} </td>
+                    <!-- <td>{{ req.name }} </td> -->
+                    <!-- <td>{{ req.start_date}}</td>
+                    <td>{{ req.end_date }} </td> -->
                     <td>{{ req.comment }}</td>
                     <td><button class="button is-success" name="decision" value={{ req.id }} formaction="/approve">Approve</button></td>
                     <td><button class="button is-danger" name="decision" value={{ req.id }} formaction="/deny">Deny</button></td>
