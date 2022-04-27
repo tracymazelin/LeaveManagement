@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block content %}
+<h3 class="title">Employees</h3>
+<div class="column is-three-fifths is-offset-one-fifth">
+    <div class="box">
+        {% if employees %}
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>First Name</th>
+                    <th>Start Date</th>
+                    <th>Manager Name</th>
+                    <th>Admin</th>
+                    <th>Manager</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in employees %}
+                <tr>
+
+                    <td>{{ emp.first_name }}</td>
+                    <td>{{ emp.last_name }}</td>
+                    <td>{{ emp.start_date }} </td>
+                    <td>{{ emp.manager.name }} </td>
+                    <td>{{emp.is_admin}}</td>
+                    <td>{{emp.is_manager}}</td>
+                </tr>{% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Results</p>
+        {% endif %}
+    </div>
+</div> {% endblock %}

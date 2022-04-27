@@ -85,7 +85,9 @@ class Employee(db.Model):
                 'id': self.manager_id,
                 'name': self.get_manager_name_by_id(self.manager_id)
                 
-            }
+            },
+            'user_id': self.user_id,
+            'start_date': self.start_date.strftime('%Y-%m-%d')  
         }
 
 employee_parser = reqparse.RequestParser(bundle_errors=True)
@@ -94,6 +96,8 @@ employee_parser.add_argument('last_name', required=True, help="last name is a re
 employee_parser.add_argument('is_admin', required=True, type=bool, help="is_admin is a required parameter!")
 employee_parser.add_argument('is_manager', required=True, type=bool, help="is_manager is a required parameter!")
 employee_parser.add_argument('manager', type=dict)
+employee_parser.add_argument('start_date', required=True, help="start_date is a required parameter!")
+employee_parser.add_argument('user_id')
 
 manager_parser = reqparse.RequestParser(bundle_errors=True)
 manager_parser.add_argument('id', type=dict, location=('manager',))

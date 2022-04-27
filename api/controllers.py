@@ -63,7 +63,7 @@ class Employees_Api(Resource):
     
     def post(self):
         args = employee_parser.parse_args()
-        employee_record = Employee(first_name=args['first_name'], last_name=args['last_name'], is_admin=args['is_admin'], manager_employee_id=args['manager']['id'])
+        employee_record = Employee(first_name=args['first_name'], last_name=args['last_name'], employee_is_admin=args['is_admin'], employee_is_manager=args['is_manager'], manager_id=args['manager']['id'], start_date=datetime.date.fromisoformat(str(args['start_date'])), user_id=args['user_id'])
         db.session.add(employee_record)
         db.session.commit()
         return Employee.serialize(employee_record), 201
@@ -148,13 +148,13 @@ class Employee_Leave_Requests_Api(Resource):
     
 
 #MANAGER_EMPLOYEES
-class Manager_Employees(Resource):
+class Manager_Employees_Api(Resource):
     def get(self, manager_id):
         employees = Employee.query.filter_by(manager_id=manager_id)
         return [Employee.serialize(emp) for emp in employees]
 
 #MANAGER_LEAVEREQUESTS
-class Manager_LeaveRequests(Resource):
+class Manager_LeaveRequests_Api(Resource):
     def get(self, manager_id):
         employees = Employee.query.filter_by(manager_id=manager_id)
 
@@ -163,6 +163,12 @@ class Manager_LeaveRequests(Resource):
             emplist.append(emp.employee_id)
         leave_requests = LeaveRequest.query.filter(LeaveRequest.employee_id.in_(emplist))
         return [LeaveRequest.serialize(req) for req in leave_requests]
+
+#MANAGERS
+class Managers_Api(Resource):
+    def get(self):
+        managers = Employee.query.filter_by(employee_is_manager=True)
+        return [Employee.serialize(manager) for manager in managers]
 
 
 api.add_resource(Leave_Types_Api, '/api/leave_types')
@@ -174,5 +180,6 @@ api.add_resource(Employee_Api, '/api/employee/<employee_id>')
 api.add_resource(Leave_Requests_Api, '/api/leave_requests')
 api.add_resource(Leave_Request_Api, '/api/leave_request/<leave_request_id>')
 api.add_resource(Employee_Leave_Requests_Api, '/api/employee/<employee_id>/leave_requests')
-api.add_resource(Manager_Employees, '/api/manager/<manager_id>/employees')
-api.add_resource(Manager_LeaveRequests, '/api/manager/<manager_id>/leave_requests')
+api.add_resource(Manager_Employees_Api, '/api/manager/<manager_id>/employees')
+api.add_resource(Manager_LeaveRequests_Api, '/api/manager/<manager_id>/leave_requests')
+api.add_resource(Managers_Api, '/api/managers')

@@ -33,10 +33,10 @@
             <div class="field">
                 <label class="label">Manager</label>
                 <div class="control">
-                    <div class="select is-large ">
+                    <div class="select is-large is-fullwidth">
                         <select name="manager"> 
                         {% for manager in managers %}
-                  <option value={{ manager.employee_id }}>{{ manager.first_name }} {{ manager.last_name }}</option>
+                  <option value={{ manager.manager.id }}>{{ manager.manager.name }}</option>
                   {% endfor %}
                 </select>
                     </div>
@@ -44,7 +44,7 @@
             </div>
             <div class="field">
                 <label class="label">Is Administrator</label>
-                <div class="select is-large dropdown"> <select name="is_admin">
+                <div class="select is-large dropdown is-fullwidth"> <select name="is_admin">
                       <option value="false">False</option>
                       <option value="true">True</option>
                     </select>
