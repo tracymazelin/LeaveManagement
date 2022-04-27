@@ -3,13 +3,13 @@ A python flask web application utilizing the Bulma UI Framework with Postgresql 
 
 
 Employee Login:
-Username=amanda.robinson@acme.com      local=bobby.young@acme.com
+Username=amanda.robinson@acme.com      local=paula.white@acme.com
 Password=test
 
 Manager Login:
-Username=jeremy.ryan@acme.com     local=joshua.salinas@acme.com
+Username=jeremy.ryan@acme.com     local=andrea.watts@acme.com
 Password=test
 
 Admin Login
-Username=kathy.burton@acme.com    local=kathleen.hahn@acme.com
+Username=kathy.burton@acme.com    local=steven.yu@acme.com
 Password=tes

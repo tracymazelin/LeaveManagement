@@ -31,21 +31,25 @@ def add_users():
     db.session.commit()
 
 def assign_managers():
-    for i in range(1,7):
-        emp = Employee.query.get(i)
-        emp.manager_id = 1
+    emp = Employee.query.get(1)
+    emp.manager_id=1
+    emp.employee_is_manager=True
     db.session.commit()
 
-    for i in range(7,13):
+    emp2 = Employee.query.get(2)
+    emp2.manager_id=2
+    emp2.employee_is_manager=True
+    db.session.commit()
+
+    for i in range(3,8):
+        emp = Employee.query.get(i)
+        emp.manager_id=1
+    db.session.commit()
+
+    for i in range(8,13):
         emp = Employee.query.get(i)
         emp.manager_id=2
     db.session.commit()
-
-    for i in range(1,3):
-        emp = Employee.query.get(i)
-        emp.employee_is_manager=True
-    db.session.commit()
-
 
 def assign_users():
     for i in range(1,13):
@@ -88,3 +92,4 @@ def seed():
     add_approval_statuses()
     add_leave_types()
     add_leave_requests()
+    print("The database has been seeded!")

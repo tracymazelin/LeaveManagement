@@ -17,7 +17,7 @@ login_manager.init_app(app)
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('faker.factory').setLevel(logging.ERROR)
 
-from models import User
+from models import User, Employee, LeaveRequest, LeaveType, ApprovalStatus, Manager, User
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -48,17 +48,22 @@ def db_create():
     db.drop_all()
     print('Database deleted!')
 
+@app.cli.command('reset_data')
+def db_reset():
+	db.session.query(ApprovalStatus).delete()
+	db.session.query(Employee).delete()
+	db.session.query(LeaveType).delete()
+	db.session.query(LeaveRequest).delete()
+	db.session.query(Manager).delete()
+	db.session.query(User).delete()
+	db.session.commit()
+	print('All data has been reset!')
+
 @app.cli.command('db_create')
 def db_create():
 	db.init_app(app)
 	db.create_all()
 	print('Database created!')
-
-def register_commands(app):
-    """Register CLI commands."""
-    app.cli.add_command(seed)
-
-register_commands(app)
-
+	
 if __name__=="__main__":
 	app.run(debug=True)
