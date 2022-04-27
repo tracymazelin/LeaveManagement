@@ -36,9 +36,9 @@
                             <a href="{{ url_for('main.add_employee') }}" class="navbar-item">
                                 Add Employee
                             </a> {% endif %} {% if current_user.is_authenticated and user_is_manager %}
-                            <a href="{{ url_for('main.leave_approval') }}" class="navbar-item">
-                                Approve
-                            </a> {% endif %} {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('main.process_requests') }}" class="navbar-item">
+                                Process Requests
+                            </a> {% endif %} {% if current_user.is_authenticated and not user_is_manager %}
                             <a href="{{ url_for('main.leave_request') }}" class="navbar-item">
                                 Request
                             </a> {% endif %} {% if current_user.is_authenticated %}

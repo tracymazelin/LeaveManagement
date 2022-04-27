@@ -7,39 +7,28 @@ from wtforms.validators import DataRequired, Length
 from models import Employee, User, LeaveType, LeaveRequest, Manager
 from app import db
 from datetime import date, datetime
-from api.controllers import Leave_Types_Api, Leave_Type_Api, Employee_Leave_Requests_Api, Leave_Requests_Api
 import logging
 import requests
 
 
 main = Blueprint('main', __name__)
 
+@main.context_processor
+def is_employee_admin():
+    data = requests.get('{}/api/employee/{}'.format(base_url(), user_emp_id())).json()
+    return dict(user_is_admin=data['is_admin'])
+
+@main.context_processor
+def is_employee_manager():
+    data = requests.get('{}/api/employee/{}'.format(base_url(), user_emp_id())).json()
+    return dict(user_is_manager=data['is_manager'])
+   
 def base_url():
     url = request.base_url
     return url[:url.rfind('/')]
 
 def user_emp_id():
     return Employee.get_logged_in_employee_id(current_user).employee_id
-
-@main.context_processor
-def is_employee_admin():
-    if current_user.is_authenticated:
-        admin = (User.user_is_admin(current_user)).employee_is_admin
-    else:
-        admin = False
-    return dict(user_is_admin=admin)
-
-@main.context_processor
-def is_employee_manager():
-    if current_user.is_authenticated:
-        manager = Employee.query.get(current_user.get_id()).employee_is_manager
-        if manager is None:
-            manager = True
-        else:
-            manager = False
-    else:
-        manager = False
-    return dict(user_is_manager=manager)
 
 @main.route('/')
 def index():
@@ -85,7 +74,8 @@ def add_employee_post():
 @main.route('/leave_request')
 @login_required
 def leave_request():
-    return render_template('leave_request.html', types=Leave_Types_Api.get(LeaveType))
+    types = requests.get(base_url()+'/api/leave_types').json()
+    return render_template('leave_request.html', types=types)
     
 @main.route('/leave_request', methods=['POST'])
 @login_required
@@ -103,21 +93,20 @@ def leave_request_post():
     data = requests.get('{}/api/employee/{}/leave_requests'.format(base_url(), user_emp_id())).json()
     return render_template('leave_request_history.html', requests=data)
     
-    
-
 @main.route('/leave_request_history')
 @login_required
 def leave_request_history():
     data = requests.get('{}/api/employee/{}/leave_requests'.format(base_url(), user_emp_id())).json()
     return render_template('leave_request_history.html', requests=data)
     
-@main.route('/leave_approval')
+@main.route('/process_requests')
 @login_required
-def leave_approval():
-    manager = Employee.get_logged_in_employee_id(current_user)
-    results =  Employee.get_manager_approval_data(manager)
-    print(results[0])
-    return render_template('leave_approval.html', requests=results)
+def process_requests():
+    # manager = Employee.get_logged_in_employee_id(current_user)
+    # results =  Employee.get_manager_approval_data(manager)
+    data = requests.get(base_url()+'/api/leave_requests').json()
+    print(data)
+    return render_template('process.html', requests=data)
 
 @main.route('/approve', methods=['POST'])
 @login_required

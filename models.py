@@ -88,7 +88,7 @@ class Employee(db.Model):
                 .join(LeaveType, LeaveRequest.leave_type_id == LeaveType.leave_type_id)\
                 .join(ApprovalStatus, LeaveRequest.approval_status_id == ApprovalStatus.approval_status_id)\
                 .add_columns(Employee.first_name, Employee.last_name, LeaveType.name, LeaveRequest.start_date, LeaveRequest.end_date, ApprovalStatus.name)\
-                .filter(Employee.manager_employee_id == manager.employee_id).all()
+                .filter(Employee.manager_id == manager.employee_id).all()
         
         # data = db.session.query(LeaveRequest, Employee).filter(
         #     LeaveRequest.employee_id == Employee.employee_id,
@@ -103,11 +103,11 @@ class Employee(db.Model):
             'id': self.employee_id,
             'first_name': self.first_name,
             'last_name': self.last_name,
-            'is_admin': self.is_admin,
-            'is_manager': self.is_manager,
+            'is_admin': self.employee_is_admin,
+            'is_manager': self.employee_is_manager,
             'manager': {
                 'id': self.manager_id,
-                'name': self.get_manager_name_by_id(self.manager_employee_id)
+                'name': self.get_manager_name_by_id(self.manager_id)
                 
             }
         }
@@ -169,7 +169,7 @@ class LeaveRequest(db.Model):
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
 
-    employees = db.relationship("Employee", backref='leaverequest')
+    employee = db.relationship("Employee", backref='leaverequest')
     leaveType = db.relationship("LeaveType", backref='leaverequest')
     status = db.relationship("ApprovalStatus", backref='leaverequest')
 
@@ -178,6 +178,12 @@ class LeaveRequest(db.Model):
         if (lt_id):
             lt = LeaveType.query.get(lt_id)
             return lt.name
+    
+    def get_status_name(self, id):
+        status_id = int(id) if id else None
+        if (status_id):
+            status = ApprovalStatus.query.get(status_id)
+            return status.name
 
    
     def serialize(self):
@@ -193,7 +199,7 @@ class LeaveRequest(db.Model):
             },
             'approval_status': {
                 'id': self.approval_status_id,
-                'name': self.status.name
+                'name': self.get_status_name(self.approval_status_id)
             },
             'start_date': self.start_date.strftime('%Y-%m-%d'),
             'end_date': self.end_date.strftime('%Y-%m-%d'),

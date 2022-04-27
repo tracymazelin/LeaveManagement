@@ -8,7 +8,7 @@
 {% endif %} {% endwith %}
 <form method="POST">
     <div class="box">
-        {% if leave_requests %}
+        {% if requests %}
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
             <thead>
                 <tr>
@@ -25,10 +25,10 @@
             <tbody>
                 {% for req in requests %}
                 <tr>
-                    <td>{{ req.first_name}} {{ req.last_name}} </td>
-                    <!-- <td>{{ req.name }} </td> -->
-                    <!-- <td>{{ req.start_date}}</td>
-                    <td>{{ req.end_date }} </td> -->
+                    <td>{{ req.employee.name}} </td>
+                    <td>{{ req.leave_type.name }} </td>
+                    <td>{{ req.start_date}}</td>
+                    <td>{{ req.end_date }} </td>
                     <td>{{ req.comment }}</td>
                     <td><button class="button is-success" name="decision" value={{ req.id }} formaction="/approve">Approve</button></td>
                     <td><button class="button is-danger" name="decision" value={{ req.id }} formaction="/deny">Deny</button></td>
