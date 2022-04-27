@@ -37,11 +37,10 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    data = Employee.query.get(current_user.get_id())
-  
+    data = requests.get('{}/api/employee/{}'.format(base_url(), user_emp_id())).json()
     return render_template('profile.html', employee=data)
 
-@main.route('/add_employee')
+@main.route('/add_employee', methods=['GET'])
 @login_required
 def add_employee():
     return render_template('add_employee.html', managers=Manager.get_all_managers())
@@ -71,7 +70,7 @@ def add_employee_post():
     db.session.commit()
     return render_template('add_employee.html', managers=Manager.get_all_managers())
 
-@main.route('/leave_request')
+@main.route('/leave_request', methods=['GET'])
 @login_required
 def leave_request():
     types = requests.get(base_url()+'/api/leave_types').json()
@@ -93,37 +92,42 @@ def leave_request_post():
     data = requests.get('{}/api/employee/{}/leave_requests'.format(base_url(), user_emp_id())).json()
     return render_template('leave_request_history.html', requests=data)
     
-@main.route('/leave_request_history')
+@main.route('/leave_request_history', methods=['GET'])
 @login_required
 def leave_request_history():
-    data = requests.get('{}/api/employee/{}/leave_requests'.format(base_url(), user_emp_id())).json()
+    manager = is_employee_manager()
+    if manager['user_is_manager']:
+        data = requests.get('{}/api/manager/{}/leave_requests'.format(base_url(), user_emp_id())).json()
+    else:
+        data = requests.get('{}/api/employee/{}/leave_requests'.format(base_url(), user_emp_id())).json()
     return render_template('leave_request_history.html', requests=data)
     
-@main.route('/process_requests')
+@main.route('/process_requests', methods=['GET'])
 @login_required
 def process_requests():
-    # manager = Employee.get_logged_in_employee_id(current_user)
-    # results =  Employee.get_manager_approval_data(manager)
-    data = requests.get(base_url()+'/api/leave_requests').json()
-    print(data)
+    data = requests.get('{}/api/manager/{}/leave_requests'.format(base_url(), user_emp_id())).json()
     return render_template('process.html', requests=data)
 
 @main.route('/approve', methods=['POST'])
 @login_required
 def approve_post():
-    employee = Employee.get_logged_in_employee_id(current_user)
     requestId = request.form.get('decision')
-    lr = LeaveRequest.query.filter_by(id=requestId).first() 
-    lr.approval_status_id = 2
-    db.session.commit()  
-    return render_template('leave_approval.html', leave_requests=Employee.get_manager_approval_data(employee))
+    url = '{}/api/leave_request/{}'.format(base_url(), requestId)
+    lr = requests.get(url).json()
+    lr['approval_status']['id'] = 2
+    headers={"Content-Type":"application/json"}
+    response = requests.put(url, data=json.dumps(lr), headers=headers)
+    data = requests.get('{}/api/manager/{}/leave_requests'.format(base_url(), user_emp_id())).json()
+    return render_template('leave_request_history.html', requests=data)
 
 @main.route('/deny', methods=['POST'])
 @login_required
 def deny_post():
-    employee = Employee.get_logged_in_employee_id(current_user)
     requestId = request.form.get('decision')
-    lr = LeaveRequest.query.filter_by(id=requestId).first() 
-    lr.approval_status_id = 3
-    db.session.commit()  
-    return render_template('leave_approval.html', leave_requests=Employee.get_manager_approval_data(employee))
+    url = '{}/api/leave_request/{}'.format(base_url(), requestId)
+    lr = requests.get(url).json()
+    lr['approval_status']['id'] = 3
+    headers={"Content-Type":"application/json"}
+    response = requests.put(url, data=json.dumps(lr), headers=headers)
+    data = requests.get('{}/api/manager/{}/leave_requests'.format(base_url(), user_emp_id())).json()
+    return render_template('leave_request_history.html', requests=data)

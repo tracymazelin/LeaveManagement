@@ -23,7 +23,7 @@
             </thead>
 
             <tbody>
-                {% for req in requests %}
+                {% for req in requests %} {% if req.approval_status.id == 1 %}
                 <tr>
                     <td>{{ req.employee.name}} </td>
                     <td>{{ req.leave_type.name }} </td>
@@ -33,7 +33,7 @@
                     <td><button class="button is-success" name="decision" value={{ req.id }} formaction="/approve">Approve</button></td>
                     <td><button class="button is-danger" name="decision" value={{ req.id }} formaction="/deny">Deny</button></td>
                 </tr>
-                {% endfor %}
+                {% endif %} {% endfor %}
             </tbody>
         </table>
         {% else %}

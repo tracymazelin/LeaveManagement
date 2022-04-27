@@ -153,6 +153,17 @@ class Manager_Employees(Resource):
         employees = Employee.query.filter_by(manager_id=manager_id)
         return [Employee.serialize(emp) for emp in employees]
 
+#MANAGER_LEAVEREQUESTS
+class Manager_LeaveRequests(Resource):
+    def get(self, manager_id):
+        employees = Employee.query.filter_by(manager_id=manager_id)
+
+        emplist = []
+        for emp in employees:
+            emplist.append(emp.employee_id)
+        leave_requests = LeaveRequest.query.filter(LeaveRequest.employee_id.in_(emplist))
+        return [LeaveRequest.serialize(req) for req in leave_requests]
+
 
 api.add_resource(Leave_Types_Api, '/api/leave_types')
 api.add_resource(Leave_Type_Api, '/api/leave_type/<leave_type_id>')
@@ -164,3 +175,4 @@ api.add_resource(Leave_Requests_Api, '/api/leave_requests')
 api.add_resource(Leave_Request_Api, '/api/leave_request/<leave_request_id>')
 api.add_resource(Employee_Leave_Requests_Api, '/api/employee/<employee_id>/leave_requests')
 api.add_resource(Manager_Employees, '/api/manager/<manager_id>/employees')
+api.add_resource(Manager_LeaveRequests, '/api/manager/<manager_id>/leave_requests')

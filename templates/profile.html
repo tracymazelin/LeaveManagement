@@ -2,4 +2,9 @@
 <h1 class="title">
     Welcome, {{ employee.first_name}} {{employee.last_name}}!{{ admin}}
 </h1>
-{% endblock %}
+{% if user_is_manager %}
+<p>Role: Manager</p> {% elif user_is_admin %}
+<p>Role: Admin</p>
+{% else %}
+<p>Role: Employee</p>
+{% endif %} {% endblock %}

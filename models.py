@@ -72,31 +72,7 @@ class Employee(db.Model):
         if (type(emp_id) is int):
             name = "{} {}".format(emp.first_name, emp.last_name)
         return name 
-    
-    def get_leave_request_history(employee):
-        return LeaveRequest.query.filter(LeaveRequest.employee_id == employee.employee_id).all()
-
-    def is_manager(self, id):
-        emp = Employee.query.get(id)
-        if (emp.manager_employee_id is None):
-            return True
-        return False
-
-    def get_manager_approval_data(manager):
-        data = LeaveRequest.query\
-                .join(Employee, LeaveRequest.employee_id == Employee.employee_id)\
-                .join(LeaveType, LeaveRequest.leave_type_id == LeaveType.leave_type_id)\
-                .join(ApprovalStatus, LeaveRequest.approval_status_id == ApprovalStatus.approval_status_id)\
-                .add_columns(Employee.first_name, Employee.last_name, LeaveType.name, LeaveRequest.start_date, LeaveRequest.end_date, ApprovalStatus.name)\
-                .filter(Employee.manager_id == manager.employee_id).all()
-        
-        # data = db.session.query(LeaveRequest, Employee).filter(
-        #     LeaveRequest.employee_id == Employee.employee_id,
-        #     Employee.manager_employee_id == manager.employee_id
-        # ).all()
-        #data = Employee.manager_employee_id == manager.employee_id
-        #print(data)
-        return data
+       
     
     def serialize(self):
         return {
