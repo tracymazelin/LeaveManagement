@@ -11,7 +11,7 @@ class User(UserMixin, db.Model):
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     
-    employee = db.relationship('Employee', backref='user')
+    employee = db.relationship('Employee', backref='user', lazy='dynamic')
     
     def __repr__(self):
 	    return "<User: {} {}>".format(self.user_id, self.email)
@@ -21,6 +21,9 @@ class User(UserMixin, db.Model):
 
     def user_is_admin(user):
         return (Employee.query.filter_by(user_id=user.user_id).first())
+    
+    def get_employee_id(user_id):
+        return (Employee.query.filter_by(user_id=user_id).first()).employee_id
 
 class Manager(db.Model):    
     manager_id = db.Column(db.Integer, primary_key=True)

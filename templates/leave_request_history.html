@@ -16,11 +16,11 @@
             <tbody>
                 {% for request in requests %}
                 <tr>
-                    <td>{{ request.types.name }}</td>
+                    <td>{{ request.leave_type.name }}</td>
                     <td>{{ request.start_date }}</td>
                     <td>{{ request.end_date }} </td>
                     <td>{{request.comment}}</td>
-                    <td>{{request.status.name}}</td>
+                    <td>{{request.approval_status.name}}</td>
                 </tr>{% endfor %}
             </tbody>
         </table>

@@ -132,6 +132,22 @@ class Leave_Request_Api(Resource):
         db.session.commit()
         return LeaveRequest.serialize(record), 201
 
+#LEAVE_REQUEST_BY_EMPLOYEE
+class Employee_Leave_Requests_Api(Resource):
+    def get(self, employee_id):
+        leave_requests = LeaveRequest.query.filter_by(employee_id=employee_id)
+        return [LeaveRequest.serialize(leave_request) for leave_request in leave_requests]
+    
+    def post(self, employee_id):
+        args = leave_parser.parse_args()
+        leave_request_record = LeaveRequest(employee_id=employee_id, leave_type_id=args['leave_type']['id'], \
+        approval_status_id=args['approval_status']['id'], start_date=datetime.date.fromisoformat(str(args['start_date'])), end_date=datetime.date.fromisoformat(str(args['end_date'])), comment=args['comment'])
+        db.session.add(leave_request_record)
+        db.session.commit()
+        return LeaveRequest.serialize(leave_request_record), 201
+    
+
+
 api.add_resource(Leave_Types_Api, '/api/leave_types')
 api.add_resource(Leave_Type_Api, '/api/leave_type/<leave_type_id>')
 api.add_resource(Approval_Statuses_Api, '/api/approval_statuses')
@@ -140,3 +156,4 @@ api.add_resource(Employees_Api, '/api/employees')
 api.add_resource(Employee_Api, '/api/employee/<employee_id>')
 api.add_resource(Leave_Requests_Api, '/api/leave_requests')
 api.add_resource(Leave_Request_Api, '/api/leave_request/<leave_request_id>')
+api.add_resource(Employee_Leave_Requests_Api, '/api/employee/<employee_id>/leave_requests')

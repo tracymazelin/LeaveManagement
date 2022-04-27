@@ -15,6 +15,7 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 logging.basicConfig(level=logging.DEBUG)
+logging.getLogger('faker.factory').setLevel(logging.ERROR)
 
 from models import User
 
@@ -24,7 +25,7 @@ def load_user(user_id):
 
 @app.route("/")
 def home():
-	logging.debug("hello")
+	
 	return redirect(url_for('index'))
 
 @app.route("/index", methods = ["GET", "POST"])

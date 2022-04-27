@@ -6,14 +6,21 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length
 from models import Employee, User, LeaveType, LeaveRequest, Manager
 from app import db
-from datetime import datetime
-from api.controllers import Leave_Types_Api, Leave_Type_Api
-
+from datetime import date, datetime
+from api.controllers import Leave_Types_Api, Leave_Type_Api, Employee_Leave_Requests_Api, Leave_Requests_Api
+import logging
+import requests
 
 
 main = Blueprint('main', __name__)
 
-#adding keys and values to the context object which is global so it can be accessed by any of the templates
+def base_url():
+    url = request.base_url
+    return url[:url.rfind('/')]
+
+def user_emp_id():
+    return Employee.get_logged_in_employee_id(current_user).employee_id
+
 @main.context_processor
 def is_employee_admin():
     if current_user.is_authenticated:
@@ -83,22 +90,26 @@ def leave_request():
 @main.route('/leave_request', methods=['POST'])
 @login_required
 def leave_request_post():
-    employee = Employee.get_logged_in_employee_id(current_user)
     leave_type = request.form.get('types')
     approval_status = 1
     start_date = datetime.fromisoformat(request.form.get('start_date'))
     end_date = datetime.fromisoformat(request.form.get('end_date'))
     comment = request.form.get('comment')
-    leave_request = LeaveRequest(employee_id=employee.employee_id, leave_type_id=leave_type, approval_status_id=approval_status, start_date=start_date, end_date=end_date, comment=comment)
-    db.session.add(leave_request)
-    db.session.commit()   
-    return render_template('leave_request_history.html',  requests=Employee.get_leave_request_history(employee))
+    url = base_url()+'/api/leave_requests' 
+    headers={"Content-Type":"application/json"}
+    r = {"employee": {"id": user_emp_id()},"leave_type": {"id": leave_type},"approval_status": {"id": approval_status},"start_date": start_date.strftime('%Y-%m-%d'),"end_date": end_date.strftime('%Y-%m-%d'),"comment": comment}
+    response = requests.post(url, data=json.dumps(r), headers=headers)
+    print(response.text)
+    data = requests.get('{}/api/employee/{}/leave_requests'.format(base_url(), user_emp_id())).json()
+    return render_template('leave_request_history.html', requests=data)
+    
+    
 
 @main.route('/leave_request_history')
 @login_required
 def leave_request_history():
-    employee = Employee.get_logged_in_employee_id(current_user)
-    return render_template('leave_request_history.html',  requests=Employee.get_leave_request_history(employee))
+    data = requests.get('{}/api/employee/{}/leave_requests'.format(base_url(), user_emp_id())).json()
+    return render_template('leave_request_history.html', requests=data)
     
 @main.route('/leave_approval')
 @login_required
