@@ -23,11 +23,11 @@ A python flask web application using PostgreSQL and a Rest-API backend.  This ap
 
 # Credentials
 
-| Type        | Username                  | Password  | Functions                          |
-| ----------- | --------------------------|-----------| ------------------------------------
-| Employee    | amanda.robinson@acme.com  | test      | Submit leave request, view history |
-| Manager     | jeremy.ryan@acme.com      | test      | Approve / Deny requests            |
-| Admin       | kathy.burton@acme.com     | test      | Add / Edit / Delete employees      |
+| Type        | Username                  | Password  | Functions                               |
+| ----------- | --------------------------|-----------| ----------------------------------------
+| Employee    | amanda.robinson@acme.com  | test      | Submit leave request, view history      |
+| Manager     | jeremy.ryan@acme.com      | test      | Approve or deny requests, view history  |
+| Admin       | kathy.burton@acme.com     | test      | View, add, edit, and delete employees   |
 
 
 # Installation
@@ -38,7 +38,17 @@ The commands below set everything up to run the app locally:
     $ virtualenv venv
     $ . venv/bin/activate
     (venv) pip install -r requirements.txt
-  
+
+Note for Microsoft Windows users: replace the virtual environment activation command above with `venv\Scripts\activate`.
+
+Create a `.env` file with the following
+
+```
+FLASK_APP=app.py
+FLASK_ENV=development
+SECRET_KEY=9OLWxND4o83 (any random string)
+DATABASE_URL=sqlite:///
+```  
 # To setup the database migrations and seed the tables:
 
     $ flask db init
@@ -60,4 +70,3 @@ Keep the tables but delete all of the data:
 
     $ flask db_reset
 
-Note for Microsoft Windows users: replace the virtual environment activation command above with `venv\Scripts\activate`.
