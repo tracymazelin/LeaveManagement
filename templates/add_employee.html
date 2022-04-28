@@ -7,7 +7,7 @@
             {{ messages[0] }}</a>
         </div>
         {% endif %} {% endwith %}
-        <form method="POST" action="/add_employee">
+        <form method="POST" action={{formaction}}>
 
             <div class="field">
                 <label class="label">First Name</label>
@@ -62,7 +62,8 @@
                     </select>
                 </div>
             </div>
-            <button class="button is-block is-info is-large is-fullwidth">Save</button>
+            {% if employee %}<button class="button is-block is-info is-large is-fullwidth" name="id" value={{employee.id}}>Save</button>{% else %}
+            <button class="button is-block is-info is-large is-fullwidth">Save</button>{% endif %}
         </form>
     </div>
 </div>

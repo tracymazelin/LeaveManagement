@@ -31,9 +31,9 @@
                     <td>{{emp.is_admin}}</td>
                     <td>{{emp.is_manager}}</td>
                     <td>
-                        <button class="button is-warning" name="decision" value={{ emp.id }} formaction="edit_employee ">Edit</button></td>
+                        <button class="button is-warning" name="edit" value={{ emp.id }} formaction="edit_employee">Edit</button></td>
                     <td>
-                        <button class="button is-danger" name="decision" value={{ emp.id }} formaction="delete_employee">Delete</button></td>
+                        <button class="button is-danger" name="delete" value={{ emp.id }} formaction="delete_employee">Delete</button></td>
                 </tr>{% endfor %}
             </tbody>
         </table>

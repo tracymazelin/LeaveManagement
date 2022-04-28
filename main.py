@@ -27,7 +27,7 @@ def base_url():
     return url[:url.rfind('/')]
 
 def user_emp_id():
-    return Employee.get_logged_in_employee_id(current_user).employee_id
+    return (Employee.get_logged_in_employee_id(current_user)).employee_id
 
 @main.route('/')
 def index():
@@ -102,11 +102,10 @@ def deny_post():
     data = requests.get('{}/api/manager/{}/leave_requests'.format(base_url(), user_emp_id())).json()
     return render_template('leave_request_history.html', requests=data)
 
-
 @main.route('/employees')
 @login_required
 def view_employees():
-    data = requests.get('{}/api/employees'.format(base_url(), user_emp_id())).json()
+    data = requests.get(base_url()+'/api/employees').json() 
     return render_template('employees.html', employees=data)
 
 
@@ -145,13 +144,16 @@ def add_employee_post():
     new_emp = {"first_name": first_name,"last_name": last_name,"is_admin": is_admin, "is_manager": False, "manager": { "id": manager}, "start_date": start_date.strftime('%Y-%m-%d'), "user_id": user.user_id}
     headers={"Content-Type":"application/json"}
     emp = requests.post(url, data=json.dumps(new_emp), headers=headers)
-    return render_template('add_employee.html', managers=requests.get(base_url()+'/api/managers').json())
+    data = requests.get(base_url()+'/api/employees').json() 
+    return render_template('employees.html', action="Add", formaction="/add_employee", employees=data)
+
 
 
 @main.route('/delete_employee', methods=['POST'])
 @login_required
 def delete_employee():
-    requestId = request.form.get('decision')
+    requestId = request.form.get('delete')
+    print(requestId)
     url = base_url()+'/api/employee/'+requestId
     emp = requests.delete(url)
     data = requests.get('{}/api/employees'.format(base_url(), user_emp_id())).json()
@@ -160,8 +162,24 @@ def delete_employee():
 @main.route('/edit_employee', methods=['POST'])
 @login_required
 def edit_employee():
-    requestId = request.form.get('decision')
+    requestId = request.form.get('edit')
     url = base_url()+'/api/employee/'+requestId
     emp = requests.get(url).json()
-    data = requests.get('{}/api/employees'.format(base_url(), user_emp_id())).json()
-    return render_template('add_employee.html', action="Edit", managers=requests.get(base_url()+'/api/managers').json(), employee=emp)
+    return render_template('add_employee.html', action="Edit", formaction="/edit_save", managers=requests.get(base_url()+'/api/managers').json(), employee=emp)
+
+@main.route('/edit_save', methods=['POST'])
+@login_required
+def edit_save():
+    empId = request.form.get('id')
+    first_name =  request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    start_date = datetime.fromisoformat(request.form.get('start_date'))
+    is_admin = True if (request.form.get('is_admin')).lower() == 'true' else False 
+    is_manager = True if (request.form.get('is_manager')).lower() == 'true' else False 
+    manager = request.form.get('manager')
+    update_emp = {"first_name": first_name,"last_name": last_name, "start_date": start_date.strftime('%Y-%m-%d'), "manager": { "id": manager }, "is_admin": is_admin, "is_manager": is_manager }
+    url = '{}/api/employee/{}'.format(base_url(), empId)
+    headers={"Content-Type":"application/json"}
+    emp = requests.put(url, data=json.dumps(update_emp), headers=headers)
+    data = requests.get(base_url()+'/api/employees').json() 
+    return render_template('employees.html', employees=data)

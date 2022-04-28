@@ -78,6 +78,10 @@ class Employee_Api(Resource):
         record = Employee.query.filter_by(employee_id=employee_id)\
             .first_or_404(description='Employee with id={} is not available'.format(employee_id))
         user = User.query.get(record.user_id)
+        lrs = LeaveRequest.query.filter_by(employee_id=employee_id)
+        if lrs:
+            for lr in lrs:
+                db.session.delete(lr)
         db.session.delete(record)
         db.session.delete(user)
         db.session.commit()
@@ -89,8 +93,10 @@ class Employee_Api(Resource):
             .first_or_404(description='Employee with id={} is not available'.format(employee_id))
         record.first_name = args['first_name']
         record.last_name = args['last_name']
-        record.is_admin = args['is_admin']
-        record.manager_employee_id = args['manager']['id']
+        record.start_date = datetime.date.fromisoformat(str(args['start_date']))
+        record.employee_is_admin = args['is_admin']
+        record.employee_is_manager = args['is_manager']
+        record.manager_id = args['manager']['id']
         db.session.commit()
         return Employee.serialize(record), 201
 

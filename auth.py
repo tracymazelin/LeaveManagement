@@ -57,7 +57,7 @@ def signup_post():
     user = User.query.filter_by(email=email).first()
 
     # add new employee
-    new_employee = Employee(first_name=first_name, last_name=last_name, start_date=date.today(), is_admin=False, user_id=user.user_id, manager_employee_id=1)
+    new_employee = Employee(first_name=first_name, last_name=last_name, start_date=date.today(), employee_is_admin=False, user_id=user.user_id, manager_id=1)
     db.session.add(new_employee)
     db.session.commit()
     

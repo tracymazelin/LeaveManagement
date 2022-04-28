@@ -29,13 +29,9 @@ class Manager(db.Model):
     manager_id = db.Column(db.Integer, primary_key=True)
     manager_employee_id = db.Column(db.Integer)
 
-  
     def user_is_manager(user):
         return (Employee.query.filter_by(user_id=user.user_id).first()).manager_employee_id
     
-    def get_manager_details(user):
-        pass
-       
 
     def get_all_managers():
         return Employee.query.filter(Employee.manager_employee_id == None).all()
@@ -54,12 +50,9 @@ class Employee(db.Model):
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
 
-    #manager = db.relationship('Manager', back_populates='employee', foreign_keys='Employee.manager_id')
-    #user = db.relationship('User', back_populates='employee', foreign_keys='User.user_id')
-    
-       
+           
     def get_logged_in_employee_id(user):
-        return Employee.query.filter(Employee.employee_id == user.user_id).first()
+        return Employee.query.filter_by(user_id=user.user_id).first()
     
     def get_employee_by_id(id):
         return Employee.query.get(id)
@@ -206,5 +199,3 @@ leave_type_parser = leave_type_parser.parse_args(req=leave_parser)
 approval_status_parser = reqparse.RequestParser(bundle_errors=True)
 approval_status_parser.add_argument('id', type=dict, location=('leave_type',))
 approval_status_parser = approval_status_parser.parse_args(req=leave_parser)
-    
-
