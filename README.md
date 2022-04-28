@@ -1,15 +1,63 @@
-# LeaveManagement
-A python flask web application utilizing the Bulma UI Framework with Postgresql and hosted on Heroku.  This application has been built for the Capstone project of my Masters in Software Development.  It allows employees to submit requests for time-off, managers to process the requests, and administrators to add employees and managers.
+# Leave Management #
+A python flask web application using PostgreSQL and a Rest-API backend.  This application is hosted Heroku:
+
+[https://tmazelin-leave-management.herokuapp.com/](https://tmazelin-leave-management.herokuapp.com/)
+
+#### Created by: Tracy Mazelin ####
+
+# Main features: #
+
+- Secure user account creation
+- Secure user login
+- Employees:
+    - Submit Leave Requests for manager approval
+    - View Leave Request History
+- Managers:
+    - Approve or deny leave requests
+    - View approval history for all employees on team
+- Administrators:
+    - View all employees
+    - Add new employees and assign to managers
+    - Edit employees
+    - Delete employees
+
+# Credentials
+
+| Type        | Username                  | Password  | Functions                          |
+| ----------- | --------------------------|-----------| ------------------------------------
+| Employee    | amanda.robinson@acme.com  | test      | Submit leave request, view history |
+| Manager     | jeremy.ryan@acme.com      | test      | Approve / Deny requests            |
+| Admin       | kathy.burton@acme.com     | test      | Add / Edit / Delete employees      |
 
 
-Employee Login:
-Username=amanda.robinson@acme.com      local=paula.white@acme.com
-Password=test
+# Installation
 
-Manager Login:
-Username=jeremy.ryan@acme.com     local=andrea.watts@acme.com
-Password=test
+The commands below set everything up to run the app locally:
 
-Admin Login
-Username=kathy.burton@acme.com    local=steven.yu@acme.com
-Password=tes
+    $ git clone https://github.com/tracymazelin/LeaveManagement
+    $ virtualenv venv
+    $ . venv/bin/activate
+    (venv) pip install -r requirements.txt
+  
+# To setup the database migrations and seed the tables:
+
+    $ flask db init
+    $ flask db migrate
+    $ flask db upgrade
+    $ flask seed 
+
+# Run the application
+
+    $ flask run
+
+# Utilities
+
+Delete all the tables
+    
+    $ flask db_drop  
+
+Keep the tables but delete all of the data:
+
+    $ flask db_reset
+
+Note for Microsoft Windows users: replace the virtual environment activation command above with `venv\Scripts\activate`.
