@@ -1,6 +1,5 @@
-<!-- templates/base.html -->
-
 <!DOCTYPE html>
+
 <html>
 
 <head>
@@ -35,7 +34,7 @@
                             </a> {% endif %} {% if current_user.is_authenticated and user_is_admin %}
                             <a href="{{ url_for('main.add_employee') }}" class="navbar-item">
                                 Add Employee
-                            </a> {% endif %} {% if current_user.is_authenticated and user_is_admin %}
+                            </a>
                             <a href="{{ url_for('main.view_employees') }}" class="navbar-item">
                                 View All Employees
                             </a> {% endif %} {% if current_user.is_authenticated and user_is_manager %}

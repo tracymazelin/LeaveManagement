@@ -1,7 +1,7 @@
 from flask_restful import Resource, Api, abort, reqparse
 from flask import Blueprint
 from app import app
-from models import LeaveType, ApprovalStatus, Employee, LeaveRequest, leave_type_parser, employee_parser, leave_parser
+from models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser
 from app import db
 import datetime
 
@@ -77,7 +77,9 @@ class Employee_Api(Resource):
     def delete(self, employee_id):
         record = Employee.query.filter_by(employee_id=employee_id)\
             .first_or_404(description='Employee with id={} is not available'.format(employee_id))
+        user = User.query.get(record.user_id)
         db.session.delete(record)
+        db.session.delete(user)
         db.session.commit()
         return '', 204
 

@@ -1,6 +1,11 @@
 {% extends "base.html" %} {% block content %}
 <h3 class="title">Employees</h3>
-<div class="column is-three-fifths is-offset-one-fifth">
+{% with messages = get_flashed_messages() %} {% if messages %}
+<div class="notification is-danger ">
+    {{ messages[0] }}</a>
+</div>
+{% endif %} {% endwith %}
+<form method="POST">
     <div class="box">
         {% if employees %}
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
@@ -12,23 +17,29 @@
                     <th>Manager Name</th>
                     <th>Admin</th>
                     <th>Manager</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody>
                 {% for emp in employees %}
                 <tr>
-
                     <td>{{ emp.first_name }}</td>
                     <td>{{ emp.last_name }}</td>
                     <td>{{ emp.start_date }} </td>
                     <td>{{ emp.manager.name }} </td>
                     <td>{{emp.is_admin}}</td>
                     <td>{{emp.is_manager}}</td>
+                    <td>
+                        <button class="button is-warning" name="decision" value={{ emp.id }} formaction="edit_employee ">Edit</button></td>
+                    <td>
+                        <button class="button is-danger" name="decision" value={{ emp.id }} formaction="delete_employee">Delete</button></td>
                 </tr>{% endfor %}
             </tbody>
         </table>
-        {% else %}
-        <p>No Results</p>
-        {% endif %}
-    </div>
+</form>
+{% else %}
+<p>No Results</p>
+{% endif %}
+</div>
 </div> {% endblock %}

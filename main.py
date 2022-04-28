@@ -10,7 +10,6 @@ from datetime import date, datetime
 import logging
 import requests
 
-
 main = Blueprint('main', __name__)
 
 @main.context_processor
@@ -104,7 +103,7 @@ def deny_post():
     return render_template('leave_request_history.html', requests=data)
 
 
-@main.route('/employees', methods=['GET'])
+@main.route('/employees')
 @login_required
 def view_employees():
     data = requests.get('{}/api/employees'.format(base_url(), user_emp_id())).json()
@@ -115,7 +114,7 @@ def view_employees():
 @login_required
 def add_employee():
     data = requests.get(base_url()+'/api/managers').json()
-    return render_template('add_employee.html', managers=data)
+    return render_template('add_employee.html', action="Add", managers=data)
 
 @main.route('/add_employee', methods=['POST'])
 @login_required
@@ -124,6 +123,7 @@ def add_employee_post():
     last_name = request.form.get('last_name')
     start_date = datetime.fromisoformat(request.form.get('start_date'))
     is_admin = True if (request.form.get('is_admin')).lower() == 'true' else False 
+    is_manager = True if (request.form.get('is_manager')).lower() == 'true' else False 
     manager = request.form.get('manager')
     email = '{}.{}@acme.com'.format(first_name.lower(), last_name.lower())
 
@@ -146,3 +146,22 @@ def add_employee_post():
     headers={"Content-Type":"application/json"}
     emp = requests.post(url, data=json.dumps(new_emp), headers=headers)
     return render_template('add_employee.html', managers=requests.get(base_url()+'/api/managers').json())
+
+
+@main.route('/delete_employee', methods=['POST'])
+@login_required
+def delete_employee():
+    requestId = request.form.get('decision')
+    url = base_url()+'/api/employee/'+requestId
+    emp = requests.delete(url)
+    data = requests.get('{}/api/employees'.format(base_url(), user_emp_id())).json()
+    return render_template('employees.html', employees=data)
+
+@main.route('/edit_employee', methods=['POST'])
+@login_required
+def edit_employee():
+    requestId = request.form.get('decision')
+    url = base_url()+'/api/employee/'+requestId
+    emp = requests.get(url).json()
+    data = requests.get('{}/api/employees'.format(base_url(), user_emp_id())).json()
+    return render_template('add_employee.html', action="Edit", managers=requests.get(base_url()+'/api/managers').json(), employee=emp)

@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 <div class="column is-4 is-offset-4">
-    <h3 class="title">Add a new employee</h3>
+    <h3 class="title">{{action}} an employee</h3>
     <div class="box">
         {% with messages = get_flashed_messages() %} {% if messages %}
         <div class="notification is-danger">
@@ -12,21 +12,24 @@
             <div class="field">
                 <label class="label">First Name</label>
                 <div class="control">
-                    <input class="input is-large" type="text" name="first_name" placeholder="First Name" autofocus="">
+                    {% if employee %}<input class="input is-large" type="text" name="first_name" value={{employee.first_name}} autofocus=""> {% else %}
+                    <input class="input is-large" type="text" name="first_name" placeholder="First Name" autofocus="">{% endif %}
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Last Name</label>
                 <div class="control">
-                    <input class="input is-large" type="text" name="last_name" placeholder="Last Name" autofocus="">
+                    {% if employee %}<input class="input is-large" type="text" name="last_name" value={{employee.last_name}} autofocus=""> {% else %}
+                    <input class="input is-large" type="text" name="last_name" placeholder="Last Name" autofocus="">{% endif %}
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Start Date</label>
                 <div class="control">
-                    <input class="input is-large" type="date" name="start_date" placeholder="Start Date" autofocus="">
+                    {% if employee %}<input class="input is-large" type="text" name="start_date" value={{employee.start_date}} autofocus="">{% else %}
+                    <input class="input is-large" type="date" name="start_date" placeholder="Start date" autofocus="">{% endif %}
                 </div>
             </div>
 
@@ -34,10 +37,11 @@
                 <label class="label">Manager</label>
                 <div class="control">
                     <div class="select is-large is-fullwidth">
-                        <select name="manager"> 
-                        {% for manager in managers %}
-                  <option value={{ manager.manager.id }}>{{ manager.manager.name }}</option>
+                        <select name="manager">
+                  {% for manager in managers %}
+                  <option value={{ manager.manager.id }} selected>{{ manager.manager.name }}</option> 
                   {% endfor %}
+                 
                 </select>
                     </div>
                 </div>
@@ -50,7 +54,15 @@
                     </select>
                 </div>
             </div>
-            <button class="button is-block is-info is-large is-fullwidth">Add Employee</button>
+            <div class="field">
+                <label class="label">Is Manager</label>
+                <div class="select is-large dropdown is-fullwidth"> <select name="is_manager">
+                      <option value="false">False</option>
+                      <option value="true">True</option>
+                    </select>
+                </div>
+            </div>
+            <button class="button is-block is-info is-large is-fullwidth">Save</button>
         </form>
     </div>
 </div>
