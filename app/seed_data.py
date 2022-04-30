@@ -1,4 +1,4 @@
-from models import User, Employee, Manager, LeaveRequest, LeaveType, ApprovalStatus
+from .models import User, Employee, Manager, LeaveRequest, LeaveType, ApprovalStatus
 from app import db
 from faker import Faker
 from datetime import date, datetime

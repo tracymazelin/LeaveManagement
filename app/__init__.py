@@ -17,7 +17,7 @@ login_manager.init_app(app)
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('faker.factory').setLevel(logging.ERROR)
 
-from models import User, Employee, LeaveRequest, LeaveType, ApprovalStatus, Manager, User
+from .models import User, Employee, LeaveRequest, LeaveType, ApprovalStatus, Manager, User
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -25,23 +25,22 @@ def load_user(user_id):
 
 @app.route("/")
 def home():
-	
 	return redirect(url_for('index'))
 
 @app.route("/index", methods = ["GET", "POST"])
 def index():
 	return render_template("index.html")
 
-from auth import auth as auth_blueprint
+from .auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 
-from main import main as main_blueprint
+from .main import main as main_blueprint
 app.register_blueprint(main_blueprint)
 
-from api.controllers import api_bp as api_bp
+from .api.controllers import api_bp as api_bp
 app.register_blueprint(api_bp)
 
-from seed_data import seed as seed
+from .seed_data import seed as seed
 
 @app.cli.command('db_drop')
 def db_create():

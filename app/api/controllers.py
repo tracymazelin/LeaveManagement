@@ -1,8 +1,7 @@
 from flask_restful import Resource, Api, abort, reqparse
 from flask import Blueprint
-from app import app
-from models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser
-from app import db
+from app import app, db
+from ..models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser
 import datetime
 
 api = Api(app)

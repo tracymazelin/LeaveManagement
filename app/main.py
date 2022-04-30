@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Length
-from models import Employee, User, LeaveType, LeaveRequest, Manager
+from .models import Employee, User, LeaveType, LeaveRequest, Manager
 from app import db
 from datetime import date, datetime
 import logging
