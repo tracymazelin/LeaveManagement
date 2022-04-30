@@ -4,9 +4,7 @@ from app import app
 from models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser
 from app import db
 import datetime
-from flask_httpauth import HTTPBasicAuth
 
-auth = HTTPBasicAuth()
 api = Api(app)
 api_bp = Blueprint('api', __name__)
 
