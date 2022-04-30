@@ -21,15 +21,6 @@ A python flask web application using PostgreSQL and a Rest-API backend.  This ap
     - Edit employees
     - Delete employees
 
-# Credentials
-
-| Type        | Username                  | Password  | Functions                               |
-| ----------- | --------------------------|-----------| ----------------------------------------
-| Employee    | amanda.robinson@acme.com  | test      | Submit leave request, view history      |
-| Manager     | jeremy.ryan@acme.com      | test      | Approve or deny requests, view history  |
-| Admin       | kathy.burton@acme.com     | test      | View, add, edit, and delete employees   |
-
-
 # Installation
 
 The commands below set everything up to run the app locally:
