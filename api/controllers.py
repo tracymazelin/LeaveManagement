@@ -4,9 +4,19 @@ from app import app
 from models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser
 from app import db
 import datetime
+from flask_httpauth import HTTPBasicAuth
 
+auth = HTTPBasicAuth()
 api = Api(app)
 api_bp = Blueprint('api', __name__)
+
+#USERS
+class User_Api(Resource):    
+    def get(self):
+        args = request.args
+        print(args)
+        return User.query.filter_by(email=args['email']).first()
+
 
 #LEAVE_TYPE
 class Leave_Types_Api(Resource):
@@ -179,6 +189,7 @@ class Managers_Api(Resource):
         return [Employee.serialize(manager) for manager in managers]
 
 
+api.add_resource(User_Api, '/api/user')
 api.add_resource(Leave_Types_Api, '/api/leave_types')
 api.add_resource(Leave_Type_Api, '/api/leave_type/<leave_type_id>')
 api.add_resource(Approval_Statuses_Api, '/api/approval_statuses')

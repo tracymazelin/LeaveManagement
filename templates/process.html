@@ -8,8 +8,10 @@
 {% endif %} {% endwith %}
 <form method="POST">
     <div class="box">
+
         {% if requests %}
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+
             <thead>
                 <tr>
                     <th>Employee</th>
@@ -23,7 +25,7 @@
             </thead>
 
             <tbody>
-                {% for req in requests %} {% if req.approval_status.id == 1 %}
+                {% for req in requests %}
                 <tr>
                     <td>{{ req.employee.name}} </td>
                     <td>{{ req.leave_type.name }} </td>
@@ -33,10 +35,12 @@
                     <td><button class="button is-success" name="decision" value={{ req.id }} formaction="/approve">Approve</button></td>
                     <td><button class="button is-danger" name="decision" value={{ req.id }} formaction="/deny">Deny</button></td>
                 </tr>
-                {% endif %} {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
         {% else %}
-        <p>No Results</p>
-        {% endif %}
-</form> {% endblock %}
+        <p>You have no requests to process. Enjoy your day!</p>
+        {% endif %} {% endblock %}
+    </div>
+
+</form>

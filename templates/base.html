@@ -22,16 +22,16 @@
                         <div class="navbar-end">
                             <a href="{{ url_for('main.index') }}" class="navbar-item">
                                 Home
-                            </a> {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('main.profile') }}" class="navbar-item">
-                                Profile
-                            </a> {% endif %} {% if not current_user.is_authenticated %}
+                            </a> {% if not current_user.is_authenticated %}
                             <a href="{{ url_for('auth.login') }}" class="navbar-item">
                                 Login
                             </a>
                             <a href="{{ url_for('auth.signup') }}" class="navbar-item">
                                 Sign Up
-                            </a> {% endif %} {% if current_user.is_authenticated and user_is_admin %}
+                            </a> {% endif %} {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('main.profile') }}" class="navbar-item">
+                                Profile
+                            </a> {% endif %}{% if current_user.is_authenticated and user_is_admin %}
                             <a href="{{ url_for('main.add_employee') }}" class="navbar-item">
                                 Add Employee
                             </a>
@@ -46,8 +46,7 @@
                             </a> {% endif %} {% if current_user.is_authenticated %}
                             <a href="{{ url_for('main.leave_request_history') }}" class="navbar-item">
                                 History
-                            </a> {% endif %}{% if current_user.is_authenticated %}
-                            <a href="{{ url_for('auth.logout') }}" class="navbar-item">
+                            </a> <a href="{{ url_for('auth.logout') }}" class="navbar-item">
                                 Logout
                             </a> {% endif %}
                         </div>

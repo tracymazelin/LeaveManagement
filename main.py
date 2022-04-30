@@ -76,7 +76,11 @@ def leave_request_history():
 @login_required
 def process_requests():
     data = requests.get('{}/api/manager/{}/leave_requests'.format(base_url(), user_emp_id())).json()
-    return render_template('process.html', requests=data)
+    pending = []
+    for req in data:
+        if req['approval_status']['id'] == 1:
+            pending.append(req)
+    return render_template('process.html', requests=pending)
 
 @main.route('/approve', methods=['POST'])
 @login_required
