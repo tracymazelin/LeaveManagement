@@ -73,6 +73,12 @@ class Employees_Api(Resource):
         employee_record = Employee(first_name=args['first_name'], last_name=args['last_name'], employee_is_admin=args['is_admin'], employee_is_manager=args['is_manager'], manager_id=args['manager']['id'], start_date=datetime.date.fromisoformat(str(args['start_date'])), user_id=args['user_id'])
         db.session.add(employee_record)
         db.session.commit()
+        # if the new employee is a manager, update their manager id to the employee id..
+        if args['is_manager']:
+            update = Employee.query.get(employee_record.employee_id)
+            update.manager_id = employee_record.employee_id
+            db.session.add(update)
+            db.session.commit()
         return Employee.serialize(employee_record), 201
     
 class Employee_Api(Resource):
@@ -104,6 +110,7 @@ class Employee_Api(Resource):
         record.employee_is_admin = args['is_admin']
         record.employee_is_manager = args['is_manager']
         record.manager_id = args['manager']['id']
+        record.updated_date = datetime.datetime.now()
         db.session.commit()
         return Employee.serialize(record), 201
 
@@ -144,6 +151,7 @@ class Leave_Request_Api(Resource):
         record.employee_id = args['employee']['id']
         record.leave_type_id = args['leave_type']['id']
         record.approval_status_id = args['approval_status']['id']
+        record.updated_date = datetime.datetime.now()
         db.session.commit()
         return LeaveRequest.serialize(record), 201
 

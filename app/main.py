@@ -145,7 +145,7 @@ def add_employee_post():
     print(user.user_id)
 
     url = base_url()+'/api/employees'
-    new_emp = {"first_name": first_name,"last_name": last_name,"is_admin": is_admin, "is_manager": False, "manager": { "id": manager}, "start_date": start_date.strftime('%Y-%m-%d'), "user_id": user.user_id}
+    new_emp = {"first_name": first_name,"last_name": last_name,"is_admin": is_admin, "is_manager": is_manager, "manager": { "id": manager}, "start_date": start_date.strftime('%Y-%m-%d'), "user_id": user.user_id}
     headers={"Content-Type":"application/json"}
     emp = requests.post(url, data=json.dumps(new_emp), headers=headers)
     data = requests.get(base_url()+'/api/employees').json() 
