@@ -7,6 +7,9 @@ from app import db
 
 auth = Blueprint('auth', __name__)
 
+#Note: these methods are using the flask_login package.  They interact with the db directly per my service layer design doc.
+#The rest of the application uses the restful api service layer.
+
 @auth.route('/login')
 def login():
     return render_template('login.html')

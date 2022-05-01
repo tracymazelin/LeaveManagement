@@ -25,17 +25,6 @@ class User(UserMixin, db.Model):
     def get_employee_id(user_id):
         return (Employee.query.filter_by(user_id=user_id).first()).employee_id
 
-    def serialize(self):
-        return {
-            'id': self.user_id,
-            'email': self.email,
-            'password': self.password
-        }
-    
-user_parser = reqparse.RequestParser(bundle_errors=True)
-user_parser.add_argument('email', required=True, help="email is a required parameter!")
-user_parser.add_argument('password', required=True, help="password is a required parameter!")
-
 class Manager(db.Model):    
     manager_id = db.Column(db.Integer, primary_key=True)
     manager_employee_id = db.Column(db.Integer)
