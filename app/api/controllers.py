@@ -1,19 +1,54 @@
 from flask_restful import Resource, Api, abort, reqparse
 from flask import Blueprint
 from app import app, db
-from ..models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser
+from ..models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser, user_parser
 import datetime
 
 api = Api(app)
 api_bp = Blueprint('api', __name__)
 
 #USERS
-class User_Api(Resource):    
+class Users_Api(Resource):    
     def get(self):
-        args = request.args
-        print(args)
-        return User.query.filter_by(email=args['email']).first()
+       users = User.query.all()
+       return [User.serialize(user) for user in users]
+    
+    def post(self):
+        args = user_parser.parse_args()
+        user_record = User(email=args['email'], password=args['password'])
+        db.session.add(user_record)
+        db.session.commit()
+        return User.serialize(user_record), 201
 
+class User_Api(Resource):
+    def get(self, user_id):
+        args = user_parser.parse_args()
+        email = args['email']
+        if email:
+             user = User.serialize(
+             User.query.filter_by(email=email)
+                .first_or_404(description='User with email={} is not available'.format(user_id)))
+        else:
+            user = User.serialize(
+                User.query.filter_by(user_id=user_id)
+                    .first_or_404(description='User with id={} is not available'.format(user_id)))
+        return user
+
+    def delete(self, user_id):
+        record = User.query.filter_by(user_id=user_id)\
+            .first_or_404(description='User with id={} is not available'.format(leave_type_id))
+        db.session.delete(record)
+        db.session.commit()
+        return '', 204
+
+    def put(self, leave_type_id):
+        args = parser.parse_args()
+        record = User.query.filter_by(user_id=user_id)\
+            .first_or_404(description='User with id={} is not available'.format(leave_type_id))
+        record.email = args['email']
+        record.updated_date = datetime.datetime.now()
+        db.session.commit()
+        return User.serialize(record), 201
 
 #LEAVE_TYPE
 class Leave_Types_Api(Resource):
@@ -194,7 +229,8 @@ class Managers_Api(Resource):
         return [Employee.serialize(manager) for manager in managers]
 
 
-api.add_resource(User_Api, '/api/user')
+api.add_resource(Users_Api, '/api/users')
+api.add_resource(User_Api, '/api/user/<user_id>')
 api.add_resource(Leave_Types_Api, '/api/leave_types')
 api.add_resource(Leave_Type_Api, '/api/leave_type/<leave_type_id>')
 api.add_resource(Approval_Statuses_Api, '/api/approval_statuses')
