@@ -12,53 +12,76 @@
             <div class="field">
                 <label class="label">First Name</label>
                 <div class="control">
-                    {% if employee %}<input class="input is-large" type="text" name="first_name" value={{employee.first_name}} autofocus=""> {% else %}
-                    <input class="input is-large" type="text" name="first_name" placeholder="First Name" autofocus="">{% endif %}
+                    {% if employee %}
+                    <input class="input is-large" type="text" required="required" maxlength="30" name="first_name" value={{employee.first_name}} autofocus=""> {% else %}
+                    <input class=" input is-large" type="text" required="required" name="first_name" maxlength="30" placeholder="First Name" autofocus="">{% endif %}
                 </div>
             </div>
 
-            <div class="field">
-                <label class="label">Last Name</label>
-                <div class="control">
-                    {% if employee %}<input class="input is-large" type="text" name="last_name" value={{employee.last_name}} autofocus=""> {% else %}
-                    <input class="input is-large" type="text" name="last_name" placeholder="Last Name" autofocus="">{% endif %}
+            <div class="field ">
+                <label class="label ">Last Name</label>
+                <div class="control ">
+                    {% if employee %}<input class="input is-large" type="text" required="required" maxlength="30" name="last_name" value={{employee.last_name}} autofocus=""> {% else %}
+                    <input class="input is-large" type="text" required="required" name="last_name" maxlength="30" placeholder="Last Name" autofocus="">{% endif %}
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Start Date</label>
                 <div class="control">
-                    {% if employee %}<input class="input is-large" type="text" name="start_date" value={{employee.start_date}} autofocus="">{% else %}
-                    <input class="input is-large" type="date" name="start_date" placeholder="Start date" autofocus="">{% endif %}
+                    {% if employee %}
+                    <input class="input is-large" type="date" required="required" name="start_date" value={{employee.start_date}} autofocus="{{employee.start_date}}">{% else %}
+                    <input class="input is-large" type="date" required="required" name="start_date" placeholder="Start date" autofocus="">{% endif %}
                 </div>
             </div>
 
             <div class="field">
                 <label class="label">Manager</label>
-                <div class="control">
+                <div class="control ">
                     <div class="select is-large is-fullwidth">
                         <select name="manager">
                   {% for manager in managers %}
-                  <option value={{ manager.manager.id }} selected>{{ manager.manager.name }}</option> 
-                  {% endfor %}
-                 
+                  {% if employee %}
+                  <option value={{ manager.manager.id }} {% if employee.manager.id == manager.manager.id %} selected="{{ manager.manager.name }}" {% endif %}>{{ manager.manager.name }}</option>{% else %}
+                  <option value={{ manager.manager.id }}>{{ manager.manager.name }}</option> 
+                  {% endif %} {% endfor %}
+
                 </select>
                     </div>
                 </div>
             </div>
             <div class="field">
                 <label class="label">Is Administrator</label>
-                <div class="select is-large dropdown is-fullwidth"> <select name="is_admin">
-                      <option value="false">False</option>
+                <div class="select is-large dropdown is-fullwidth">
+                    <select name="is_admin">
+                      {% if employee and employee.is_admin %}
+                      <option value="true" selected="true">True</option>
+                      <option value="false">False </option>
+                      {% elif employee and employee.is_admin == False %}
                       <option value="true">True</option>
+                      <option value="false" selected="false">False</option>
+                      {% else %}
+                      <option value="true">True</option>
+                      <option value="false" selected="false">False </option>
+                      {% endif %}
                     </select>
                 </div>
             </div>
+
             <div class="field">
                 <label class="label">Is Manager</label>
-                <div class="select is-large dropdown is-fullwidth"> <select name="is_manager">
-                      <option value="false">False</option>
+                <div class="select is-large dropdown is-fullwidth">
+                    <select name="is_manager">
+                      {% if employee and employee.is_manager %}
+                      <option value="true" selected="true">True</option>
+                      <option value="false">False </option>
+                      {% elif employee and employee.is_manager == False %}
                       <option value="true">True</option>
+                      <option value="false" selected="false">False</option>
+                      {% else %}
+                      <option value="true">True</option>
+                      <option value="false" selected="false">False </option>
+                      {% endif %}
                     </select>
                 </div>
             </div>
