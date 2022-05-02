@@ -112,7 +112,6 @@ def view_employees():
     data = requests.get(base_url()+'/api/employees').json() 
     return render_template('employees.html', employees=data)
 
-
 @main.route('/add_employee', methods=['GET'])
 @login_required
 def add_employee():
@@ -150,8 +149,6 @@ def add_employee_post():
     emp = requests.post(url, data=json.dumps(new_emp), headers=headers)
     data = requests.get(base_url()+'/api/employees').json() 
     return render_template('employees.html', action="Add", formaction="/add_employee", employees=data)
-
-
 
 @main.route('/delete_employee', methods=['POST'])
 @login_required

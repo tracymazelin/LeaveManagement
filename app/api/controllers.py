@@ -1,7 +1,7 @@
 from flask_restful import Resource, Api, abort, reqparse
 from flask import Blueprint
 from app import app, db
-from ..models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser
+from ..models import LeaveType, ApprovalStatus, Employee, User, LeaveRequest, leave_type_parser, employee_parser, leave_parser, Manager
 import datetime
 
 api = Api(app)
@@ -67,6 +67,9 @@ class Employees_Api(Resource):
         db.session.commit()
         # if the new employee is a manager, update their manager id to the employee id..
         if args['is_manager']:
+            manager = Manager(manager_employee_id=employee_record.employee_id)
+            db.session.add(manager)
+            db.session.commit()
             update = Employee.query.get(employee_record.employee_id)
             update.manager_id = employee_record.employee_id
             db.session.add(update)
@@ -104,6 +107,14 @@ class Employee_Api(Resource):
         record.manager_id = args['manager']['id']
         record.updated_date = datetime.datetime.now()
         db.session.commit()
+        if args['is_manager']:
+            manager = Manager(manager_employee_id=record.employee_id)
+            db.session.add(manager)
+            db.session.commit()
+            update = Employee.query.get(record.employee_id)
+            update.manager_id = record.employee_id
+            db.session.add(update)
+            db.session.commit()
         return Employee.serialize(record), 201
 
 #LEAVE_REQUEST

@@ -36,7 +36,6 @@ class Manager(db.Model):
     def get_all_managers():
         return Employee.query.filter(Employee.manager_employee_id == None).all()
    
-    
 class Employee(db.Model):
     employee_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=True)
@@ -49,8 +48,7 @@ class Employee(db.Model):
     created_date = db.Column(db.DateTime, default=datetime.utcnow)
     updated_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
     deleted_date = db.Column(db.DateTime, index=True, nullable=True, default=None)
-
-           
+  
     def get_logged_in_employee_id(user):
         return Employee.query.filter_by(user_id=user.user_id).first()
     
@@ -66,7 +64,6 @@ class Employee(db.Model):
             name = "{} {}".format(emp.first_name, emp.last_name)
         return name 
        
-    
     def serialize(self):
         return {
             'id': self.employee_id,
@@ -95,7 +92,6 @@ employee_parser.add_argument('user_id')
 manager_parser = reqparse.RequestParser(bundle_errors=True)
 manager_parser.add_argument('id', type=dict, location=('manager',))
 manager_parser = manager_parser.parse_args(req=employee_parser)
-
 
 class LeaveType(db.Model):
     leave_type_id = db.Column(db.Integer, primary_key=True)
@@ -129,7 +125,6 @@ class ApprovalStatus(db.Model):
             'name': self.name,
         }
        
-
 class LeaveRequest(db.Model):
     leave_request_id = db.Column(db.Integer, primary_key=True)
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'), nullable=False)
@@ -157,8 +152,7 @@ class LeaveRequest(db.Model):
         if (status_id):
             status = ApprovalStatus.query.get(status_id)
             return status.name
-
-   
+ 
     def serialize(self):
         return {
             'id': self.leave_request_id,
